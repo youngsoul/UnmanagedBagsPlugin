@@ -60,7 +60,6 @@ Plugin to add dynamic method to support unmanaged hibernate bags
 
 
         grailsApplication.domainClasses.each { domainClass ->
-            println "Domain: " + domainClass.name
             if( domainClass.clazz.isAnnotationPresent(UnmanagedBags)) {
                 Annotation[] annotations = domainClass.clazz.getAnnotation(UnmanagedBags).all()
                 if( annotations ) {
@@ -81,7 +80,6 @@ Plugin to add dynamic method to support unmanaged hibernate bags
             // check to see if the user used:
             // static hasUnmanagedBag = []
             if (GrailsClassUtils.isStaticProperty(domainClass.clazz, "hasUnmanagedBags")){
-                println "UnmanagedBags spec: " + domainClass.clazz.hasUnmanagedBags
 
                 Map bagSpec = domainClass.clazz.hasUnmanagedBags
 
@@ -120,15 +118,8 @@ Plugin to add dynamic method to support unmanaged hibernate bags
                     }
 
                     UnmanagedBagGenerator.generateUnmanagedBagMethods(domainClass, parentKeyPropertyName, collectionPropertyName, parentFKPropertyName, childClass)
-
                 }
-
-
             }
-            println "Domain hasUnmanagedBag: " + GrailsClassUtils.isStaticProperty(domainClass.clazz, "hasUnmanagedBag")
-
-
-
         }
     }
 
