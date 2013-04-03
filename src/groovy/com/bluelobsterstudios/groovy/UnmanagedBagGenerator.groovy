@@ -5,10 +5,31 @@ import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 /**
- * Created by IntelliJ IDEA.
+ * Generator used to create the unmanaged Bag Methods
+ *
  * User: youngsoul
- * Date: 3/28/13
- * Time: 4:05 PM
+ *
+ * Methods Create:
+ * The plugin adds an additional static identifier for a Domain, for example:
+ *
+ *  static hasUnmanagedBags = [cars: Car]
+ *
+ *  The plugin in will add the following dynamic methods for the definition above:
+ *
+ *  removeAllCars()
+ *
+ *  removeFromCars(aCar)
+ *
+ *  getCars()
+ *
+ *  setCars(List<Car>)
+ *
+ *  addToCars(aCar)
+ *
+ * addAllToCars(List<Car>)
+ *
+ *  deleteAllCars()
+ *
  */
 class UnmanagedBagGenerator {
 
@@ -47,7 +68,6 @@ class UnmanagedBagGenerator {
 
         //-------------------------  get Method Setup  -------------------------------------------
         domainClass.metaClass."$getterMethodName" = {
-            println "in Domain get:  ${domainClass.name}.$getterMethodName"
             def findAllByMethodName = getPrefixedMethodName("findAllBy", parentFKPropertyName)
             def parentIdValue = delegate."${parentKeyPropertyName}"
             def allChildren = childClass."$findAllByMethodName"(parentIdValue)
@@ -76,7 +96,6 @@ class UnmanagedBagGenerator {
                 delegate."${addToMethodName}"(it)
             }
 
-            println "in Domain set:  ${domainClass.name}.$setterMethodName (" + value?.toString() + ")"
         }
 
         //-------------------------  addTo Method Setup  -------------------------------------------
@@ -92,7 +111,6 @@ class UnmanagedBagGenerator {
             }
 
             // parent id value cannot be null - parent must have been persisted first
-            println "${parentKeyPropertyName} value: " + delegate."${parentKeyPropertyName}"
             def parentIdValue = delegate."${parentKeyPropertyName}"
             if (parentIdValue == null) {
                 throw new RuntimeException("Parent key property cannot be null: " + "${parentKeyPropertyName} was null")
@@ -102,8 +120,6 @@ class UnmanagedBagGenerator {
 
             // save value
             value.save()
-
-            println "in Domain addTO:  ${domainClass.name}.$addToMethodName (" + value?.toString() + ")"
         }
 
         //-------------------------  addAllTo Method Setup  -------------------------------------------
@@ -124,7 +140,6 @@ class UnmanagedBagGenerator {
                 delegate."${addToMethodName}"(it)
             }
 
-            println "in Domain addTO:  ${domainClass.name}.$addToMethodName (" + value?.toString() + ")"
         }
 
         //-------------------------  removeFrom Method Setup  -------------------------------------------
@@ -149,27 +164,22 @@ class UnmanagedBagGenerator {
             value."${parentFKPropertyName}" = null
             value.save()
 
-            println "in Domain removeFrom:  ${domainClass.name}.$removeFromMethodName (" + value?.toString() + ")"
         }
 
         //-------------------------  removeAll Method Setup  -------------------------------------------
         domainClass.metaClass."$removeAllMethodName" = {
             def parentIdValue = delegate."${parentKeyPropertyName}"
             String query = "update ${childClass.name} a set a.${parentFKPropertyName} = null where a.${parentFKPropertyName} = :idvalue"
-            println "removeAllQuery: $query"
             childClass.executeUpdate(query, [idvalue: parentIdValue])
 
-            println "in Domain removeAll:  ${domainClass.name}.$removeAllMethodName "
         }
 
         //-------------------------  deleteAll Method Setup  -------------------------------------------
         domainClass.metaClass."$deleteAllMethodName" = {
             def parentIdValue = delegate."${parentKeyPropertyName}"
             String query = "delete from ${childClass.name} a where a.${parentFKPropertyName} = :idvalue"
-            println "deleteAllQuery: $query"
             childClass.executeUpdate(query, [idvalue: parentIdValue])
 
-            println "in Domain deleteAll:  ${domainClass.name}.$deleteAllMethodName "
         }
 
 
