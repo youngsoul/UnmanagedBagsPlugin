@@ -47,7 +47,7 @@ There are some restrictions and caveats with this approach, which you need to kn
 
 1) It assumes that the parent object has a database id assigned to it.  Therefore it must be saved first
 
-2) There are not cascades from the parent to the children
+2) There are no cascades from the parent to the children
 
 3) This is a 1-to-many relationship
 
@@ -56,11 +56,16 @@ There are some restrictions and caveats with this approach, which you need to kn
 Usage:
 
     static hasUnmanagedBags = [cars: Car]
+
 Implies that the parent object has an 'id' property
 
 Implies the Car object has an 'ownerId' property
 
+The default values of 'id' and 'ownerId' can be changed as shown below.
+
+
     static hasUnmanagedBags = [animals:[parentFKPropertyName: "ownerFkId", childClass: Pet, parentKeyPropertyName="someId"] ]
+
 
 Allows to change some of the default values.
 
