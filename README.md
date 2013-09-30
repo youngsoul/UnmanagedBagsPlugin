@@ -25,15 +25,30 @@ The plugin in will add the following dynamic methods for the definition above:
 
 removeAllCars()
 
+* Disassociate all car instances from the parent object, but do not delete the car instances.  If there is a need
+to get a reference to the collection of cars, then it is expected the user called getCars() prior to this.  Otherwise
+there is no way to get the cars through the parent object.
+
 removeFromCars(aCar)
+
+* Disassociate the car instance from the parent, but it will NOT delete the car instance.
 
 getCars()
 
+* Get the collection of associated car instances
+
+
 setCars(List<Car>)
+
+* Will remove any existing cars associated with the parent object, save the cars in the new list and associate with the parent object
 
 addToCars(aCar)
 
+* associate the new car with the parent object adding to the collection of all cars.
+
 addAllToCars(List<Car>)
+
+
 
 deleteAllCars()
 
