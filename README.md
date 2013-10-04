@@ -48,9 +48,20 @@ addToCars(aCar)
 
 addAllToCars(List<Car>)
 
-
+* add the collect of Cars to the existing collection of cars
 
 deleteAllCars()
+
+* delete the cars associated with the parent object.  This is a destructive call on the Car collection objects.
+
+List<Parent> findAllByCarInList(List<Car>)    This is a static method of the Parent class
+
+* find all of the Parent objects that are associated with the cars in the collection.  To use a single Car just
+pass a single object in the collection such as:
+
+Parent.findAllByCarInList([car1])
+
+Will find the Parent object that is related to car1.
 
 
 There are two ways to get this behavior.  One is use to the static hasUnmanagedBag and the other is an Annotation.
