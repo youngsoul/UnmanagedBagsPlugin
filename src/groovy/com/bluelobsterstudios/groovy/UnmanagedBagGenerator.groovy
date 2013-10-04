@@ -30,6 +30,8 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
  *
  *  deleteAllCars()
  *
+ *  findAllByCarInList(List<Car>)
+ *
  */
 class UnmanagedBagGenerator {
 
@@ -66,7 +68,9 @@ class UnmanagedBagGenerator {
         String addAllToMethodName = getPrefixedMethodName("addAllTo", collectionPropertyName)
         String deleteAllMethodName = getPrefixedMethodName("deleteAll", collectionPropertyName)
 
-        //-------------------------  get Method Setup  -------------------------------------------
+        String findAllByInListMethodName = getPrefixedMethodName("findAllBy", GrailsNameUtils.getShortName(childClass.name)) + "InList"
+
+      //-------------------------  get Method Setup  -------------------------------------------
         domainClass.metaClass."$getterMethodName" = {
             def findAllByMethodName = getPrefixedMethodName("findAllBy", parentFKPropertyName)
             def parentIdValue = delegate."${parentKeyPropertyName}"
@@ -180,6 +184,19 @@ class UnmanagedBagGenerator {
             String query = "delete from ${childClass.name} a where a.${parentFKPropertyName} = :idvalue"
             childClass.executeUpdate(query, [idvalue: parentIdValue])
 
+        }
+
+        //------------------------ findBy method ---------------------------------------------------
+        domainClass.metaClass.static."$findAllByInListMethodName" = { valueCollection ->
+          if (valueCollection == null) {
+            throw new RuntimeException("Collecton of value to use in $findByMethodName must not be null")
+          }
+          if (!valueCollection instanceof Collection) {
+            throw new RuntimeException("Collecton of value to use in $findByMethodName must be a collection")
+          }
+
+          String query = "select b from ${domainClass.name} b where b.${parentKeyPropertyName} in ( select a.${parentFKPropertyName} from ${childClass.name} a where a in (:childList) )"
+          childClass.executeQuery(query, [childList: valueCollection])
         }
 
 
