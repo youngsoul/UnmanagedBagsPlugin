@@ -4,7 +4,7 @@ UnmanagedBagsPlugin
 see:  https://github.com/youngsoul/UnmanagedBagsTestDriver  for a test application project
 
 Plugin that will add dynamic methods to a Domain object to maintain a lightweight, non-hibernate/gorm managed
-bag collection of things.
+bag collection of things.  The foreign key is a logical/application level FK and not a database level constraint.
 
 The inspiration for this plugin, was a talk from Burt Beckwith on the inefficiencies of a 1-to-a lot of many
 relation.  Hibernate has to do a lot of work to maintain the proper Object semantics.  This is true for a List
