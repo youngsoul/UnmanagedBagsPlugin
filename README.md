@@ -73,19 +73,43 @@ There are some restrictions and caveats with this approach, which you need to kn
 
 1) It assumes that the parent object has a database id assigned to it.  Therefore it must be saved first
 
-2) There are no cascades from the parent to the children
+2) There are no cascades from the parent to the children.  Meaning when you save the parent, the unmanaged collection are NOT saved.  Same with deletes and updates.
 
-3) This is a 1-to-many relationship
+3) This is used to model a 1-to-many relationship
 
 4) It is a bag, so there is no implied order built into the collection.
 
+to get an unmanaged bag collection into a Domain class add the following:
+
 Usage:
 
+```
     static hasUnmanagedBags = [cars: Car]
+```
 
 Implies that the parent object has an 'id' property
 
+
 Implies the Car object has an 'ownerId' property
+
+
+For example
+
+```
+public class Parent {
+  String name
+
+  static hasUnmanagedBags = [cars:Car]
+
+}
+
+public class Car
+   String make
+   String model
+
+   Long ownerId
+}
+```
 
 The default values of 'id' and 'ownerId' can be changed as shown below.
 
@@ -93,7 +117,7 @@ The default values of 'id' and 'ownerId' can be changed as shown below.
     static hasUnmanagedBags = [animals:[parentFKPropertyName: "ownerFkId", childClass: Pet, parentKeyPropertyName="someId"] ]
 
 
-Allows to change some of the default values.
+Options are available to allow you to change some of the default values.
 
 Optional: parentFKPropertyName specifies the property in the child object used to hold the parents id value.
 
