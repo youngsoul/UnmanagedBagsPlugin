@@ -54,7 +54,7 @@ deleteAllCars()
 
 * delete the cars associated with the parent object.  This is a destructive call on the Car collection objects.
 
-List<Parent> findAllByCarInList(List<Car>)    This is a static method of the Parent class
+static List<Parent> findAllByCarInList(List<Car>)
 
 * find all of the Parent objects that are associated with the cars in the collection.  To use a single Car just
 pass a single object in the collection such as:
