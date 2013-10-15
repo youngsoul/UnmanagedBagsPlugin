@@ -181,9 +181,10 @@ class UnmanagedBagGenerator {
         //-------------------------  deleteAll Method Setup  -------------------------------------------
         domainClass.metaClass."$deleteAllMethodName" = {
             def parentIdValue = delegate."${parentKeyPropertyName}"
-            String query = "delete from ${childClass.name} a where a.${parentFKPropertyName} = :idvalue"
-            childClass.executeUpdate(query, [idvalue: parentIdValue])
-
+            if( parentIdValue ) {
+              String query = "delete from ${childClass.name} a where a.${parentFKPropertyName} = :idvalue"
+              childClass.executeUpdate(query, [idvalue: parentIdValue])
+            }
         }
 
         //------------------------ findBy method ---------------------------------------------------
